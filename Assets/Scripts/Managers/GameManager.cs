@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
 	#region Getters and Setters
 
+	public Wheel Wheel => wheel;
 	public int NumCategories => numCategories;
 	public StatesDefinitions.IState ActiveState => _activeState;
 	public SO_GameConfig GameConfig => gameConfig;

@@ -1555,7 +1555,7 @@ GameObject:
   - component: {fileID: 2067429630}
   m_Layer: 5
   m_Name: Wheel
-  m_TagString: Untagged
+  m_TagString: Wheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1634,6 +1634,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelLine: {fileID: 1835747358346006325, guid: 9aab72b81ecb10d4caeb0fbffa72c607, type: 3}
   lineHolder: {fileID: 1679015446}
+  lerpSpeed: 5
+  spinSpeed: 5
+  velocityReductionRateGraph:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 6
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  velocityReduction: 100
+  maxVelocity: 260
 --- !u!1 &2147427279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1944,6 +1972,10 @@ PrefabInstance:
       propertyPath: wheelSlider
       value: 
       objectReference: {fileID: 1932308990}
+    - target: {fileID: 4257883972745271707, guid: cc7f8d44d54265d489af8e650bee896c, type: 3}
+      propertyPath: WheelMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8111721772202372886, guid: cc7f8d44d54265d489af8e650bee896c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
