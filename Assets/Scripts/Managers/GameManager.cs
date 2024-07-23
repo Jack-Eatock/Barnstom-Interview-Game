@@ -1,20 +1,39 @@
 using System;
 using UnityEngine;
 using States;
+using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 
-	// Game State
+	[SerializeField]
+	private SO_GameConfig gameConfig;
 
+	// Game State
 	[SerializeField]
 	protected StatesDefinitions.GameStates activeState, prevState, nextState;
 	protected StatesDefinitions.IState _activeState, _prevState, _nextState;
 
+	[SerializeField]
+	private int numCategories = 7;
+
+	// Wheel
+	[SerializeField]
+	private Wheel wheel;
+
+	// Wheel Slider
+	[SerializeField]
+	private Slider wheelSlider;
+	[SerializeField]
+	private TextMeshProUGUI sliderText;
+
 	#region Getters and Setters
 
+	public int NumCategories => numCategories;
 	public StatesDefinitions.IState ActiveState => _activeState;
+	public SO_GameConfig GameConfig => gameConfig;
 
 	#endregion
 
@@ -27,6 +46,19 @@ public class GameManager : MonoBehaviour
 
 		nextState = StatesDefinitions.GameStates.SpinningWheel;
 		CheckIfStateShouldChange(StatesDefinitions.ChangeInState.NextState);
+
+		// Setup wheel slider correctly
+		wheelSlider.value = numCategories;
+		wheelSlider.onValueChanged.AddListener(UpdateNumberOfCategories);
+		UpdateNumberOfCategories(numCategories);
+
+	}
+
+	private void UpdateNumberOfCategories(float value)
+	{
+		numCategories = (int)value;
+		wheel.SetupWheel();
+		sliderText.text = "Number of Categories: " + numCategories;
 	}
 
 	#region Handling Game State
