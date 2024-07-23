@@ -2,22 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WheelSection : MonoBehaviour
 {
     [SerializeField]
-    Transform line1, line2;
+    private Transform line1, line2;
+    private Image image1, image2;
     [SerializeField]
     private TextMeshProUGUI labelText;
     [SerializeField]
     private Transform textHolder;
     private SO_Category category;
+    [SerializeField]
+    private Color selectedColour;
+    private Color defaultColour;
 
     private float startAngle = 0, endAngle = 0;
 
     public SO_Category Category => category;
 
-    public void Setup(float degreesPerSection, int offset, int numElements)
+	private void Awake()
+	{
+		image1 = line1.GetComponent<Image>();
+        image2 = line2.GetComponent<Image>();
+        defaultColour = image1.color;
+	}
+
+	public void Setup(float degreesPerSection, int offset, int numElements)
     {
         category = GameManager.Instance.GameConfig.Categories[offset];
         labelText.text = category.Text;
@@ -37,5 +49,23 @@ public class WheelSection : MonoBehaviour
     public bool AngleInBounds(float angle)
     {
         return angle > startAngle && angle < endAngle;
+    }
+
+    public void Shine(bool toggle)
+    {
+        if (toggle)
+        {
+            transform.SetAsLastSibling();
+			labelText.color = selectedColour;
+			image1.color = selectedColour;
+			image2.color = selectedColour;
+		}
+        else
+        {
+			labelText.color = defaultColour;
+			image1.color = defaultColour;
+			image2.color = defaultColour;
+		}
+     
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Wheel : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class Wheel : MonoBehaviour
 	private float velocityReduction = 100;
 	[SerializeField]
 	private float maxVelocity = 300;
+	[SerializeField]
+	private Color onSelectedColour;
+	private Color defaultColour;
+	private Image outlineImage;
 
 	public float Velocity => velocity;
 
@@ -62,9 +67,18 @@ public class Wheel : MonoBehaviour
 			
 	}
 
+	private void Awake()
+	{
+		outlineImage = GetComponent<Image>();
+		defaultColour = outlineImage.color;
+	}
+
 	public void SetupWheel()
 	{
 		Debug.Log("Setup wheel " + GameManager.Instance.NumCategories);
+
+		transform.rotation = Quaternion.identity;
+
 		// Check we have enough lines pooled. Otherwise spawn more to fill the gaps.
 		int numWheelLines = wheelLines.Count;
 		if (numWheelLines < GameManager.Instance.NumCategories)
@@ -111,7 +125,14 @@ public class Wheel : MonoBehaviour
 
 		Debug.LogError("COULD NOT FIND SECTION");
 		return null;
-	
+	}
 
+	public void Shine(bool toggle)
+	{
+		if (toggle)
+			outlineImage.color = onSelectedColour;
+			
+		else
+			outlineImage.color = defaultColour;
 	}
 }
