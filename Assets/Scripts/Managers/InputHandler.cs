@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
@@ -19,6 +21,13 @@ public class InputHandler : MonoBehaviour
 	private bool primaryInteractionIsDragging;
 	private float primaryInteractionStartTime;
 	private IEnumerator checkingPrimaryInteraction;
+
+	#region Getters
+
+
+	public Vector2 PrimaryPos => primaryPos;
+
+	#endregion
 
 	private void Awake()
 	{
@@ -128,5 +137,14 @@ public class InputHandler : MonoBehaviour
 	private void PrimaryInteractionClicked()
 	{
 		GameManager.Instance.CheckIfStateShouldChange(GameManager.Instance.ActiveState.InteractionClicked());
+	}
+
+	public List<RaycastResult> GetEventSystemRaycastResults()
+	{
+		PointerEventData eventData = new PointerEventData(EventSystem.current);
+		eventData.position = primaryPos;
+		List<RaycastResult> raycastResults = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(eventData, raycastResults);
+		return raycastResults;
 	}
 }
