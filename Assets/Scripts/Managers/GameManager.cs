@@ -3,6 +3,7 @@ using UnityEngine;
 using States;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,12 +30,22 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private TextMeshProUGUI sliderText;
 
+	// Current game
+	private WheelSection activeWheelSection;
+	private SO_Category activeCategory;
+	private SO_Question activeQuestion;
+	private EventSystem eventSystem;
+
 	#region Getters and Setters
 
+	public WheelSection ActiveWheelSection => activeWheelSection;
 	public Wheel Wheel => wheel;
 	public int NumCategories => numCategories;
 	public StatesDefinitions.IState ActiveState => _activeState;
 	public SO_GameConfig GameConfig => gameConfig;
+	public SO_Question Question => activeQuestion;
+	public SO_Category Category => activeCategory;
+	public EventSystem EventSystem => eventSystem;
 
 	#endregion
 
@@ -45,14 +56,18 @@ public class GameManager : MonoBehaviour
 		else
 			Destroy(gameObject);
 
-		nextState = StatesDefinitions.GameStates.SpinningWheel;
-		CheckIfStateShouldChange(StatesDefinitions.ChangeInState.NextState);
-
 		// Setup wheel slider correctly
 		wheelSlider.value = numCategories;
 		wheelSlider.onValueChanged.AddListener(UpdateNumberOfCategories);
 		UpdateNumberOfCategories(numCategories);
+		eventSystem = EventSystem.current;
 
+	}
+
+	private void Start()
+	{
+		nextState = StatesDefinitions.GameStates.SpinningWheel;
+		CheckIfStateShouldChange(StatesDefinitions.ChangeInState.NextState);
 	}
 
 	private void UpdateNumberOfCategories(float value)
@@ -60,6 +75,18 @@ public class GameManager : MonoBehaviour
 		numCategories = (int)value;
 		wheel.SetupWheel();
 		sliderText.text = "Number of Categories: " + numCategories;
+	}
+
+	public void LandedOnWheelSection(WheelSection section)
+	{
+		activeWheelSection = section;
+		activeCategory = section.Category;
+		activeQuestion = activeCategory.Questions[UnityEngine.Random.Range(0, activeCategory.Questions.Count)];
+	}
+
+	public void ToggleWheelSlider(bool toggle)
+	{
+		wheelSlider.interactable = toggle;
 	}
 
 	#region Handling Game State
