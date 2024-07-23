@@ -117,16 +117,16 @@ public class InputHandler : MonoBehaviour
 
 	private void PrimaryInteractionDragging()
 	{
-		Debug.Log("Dragging");
+		GameManager.Instance.CheckIfStateShouldChange(GameManager.Instance.ActiveState.InteractionDragging());
 	}
 
 	private void PrimaryInteractionDragReleased()
 	{
-		Debug.Log("Drag released");
+		GameManager.Instance.CheckIfStateShouldChange(GameManager.Instance.ActiveState.InteractionDraggingReleased());
 	}
 
 	private void PrimaryInteractionClicked()
 	{
-		Debug.Log("Clicked");
+		GameManager.Instance.CheckIfStateShouldChange(GameManager.Instance.ActiveState.InteractionClicked());
 	}
 }
