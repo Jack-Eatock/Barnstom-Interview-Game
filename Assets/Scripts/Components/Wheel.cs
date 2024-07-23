@@ -97,4 +97,21 @@ public class Wheel : MonoBehaviour
 		foreach (Transform line in lineHolder)
 			line.gameObject.SetActive(false);
 	}
+
+	public WheelSection WhichWheelSectionDidWeLandOn()
+	{
+		float anglePerSection = 360f / GameManager.Instance.NumCategories;
+
+		// Iterate over the bounds of each section and see if within.
+		for (int i = 0; i < GameManager.Instance.NumCategories; i++)
+		{
+			if (wheelLines[i].AngleInBounds(360 - angle))
+				return wheelLines[i];
+		}
+
+		Debug.LogError("COULD NOT FIND SECTION");
+		return null;
+	
+
+	}
 }
