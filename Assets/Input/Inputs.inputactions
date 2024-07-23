@@ -1,0 +1,82 @@
+{
+    "name": "Inputs",
+    "maps": [
+        {
+            "name": "Default",
+            "id": "d270fd72-96ae-4679-a38e-27f05a2553d7",
+            "actions": [
+                {
+                    "name": "PrimaryDown",
+                    "type": "Button",
+                    "id": "a3c7bd89-6d4a-4418-9779-f9b8f73b1bf9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryPos",
+                    "type": "Value",
+                    "id": "a42a4987-ca15-45cc-980d-99441d1d6258",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "541b73e2-2f2b-42dc-b0a6-c4da82279375",
+                    "path": "<Touchscreen>/primaryTouch/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "PrimaryDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "623ea0c2-9ca5-41e2-aab0-8415d251bfe6",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "PrimaryDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c4bb5b26-20c2-4b53-89fb-e4f6311ae1d6",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "PrimaryPos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4598b3dd-a892-4d65-abd9-fb12050f926d",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default",
+                    "action": "PrimaryPos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Default",
+            "bindingGroup": "Default",
+            "devices": []
+        }
+    ]
+}
