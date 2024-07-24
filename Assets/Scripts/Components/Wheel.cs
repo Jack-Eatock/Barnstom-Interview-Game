@@ -25,30 +25,25 @@ public class Wheel : MonoBehaviour
 	private float velocityReduction = 100;
 	[SerializeField]
 	private float maxVelocity = 300;
-	[SerializeField]
-	private Color onSelectedColour;
 	private Color defaultColour;
 	private Image outlineImage;
+	private float lastAngle;
 
 	public float Velocity => velocity;
 
 	private void FixedUpdate()
 	{
 		// Rotate from 0 to 360 based on the velocity.
-		//Debug.Log("velocity " + velocity);
 		angle -= velocity * Time.fixedDeltaTime * spinSpeed; // Mathf.Lerp(0, 360, fraction);
-		if (angle > 360)
+		ClampAngle();
+
+		// every time the angle passes x degrees play a sound.
+		if (Mathf.Abs(angle - lastAngle) > GameManager.Instance.DegreesPerCategory)
 		{
-			angle = angle % 360;
-		}
-		
-		else if (angle < 0)
-		{
-			float val = Mathf.Abs(angle);
-			angle = 360 - (val % 360);
+			lastAngle = angle;
+			AudioManager.Instance.PlayClip("UiClick", 1);
 		}
 
-		//Debug.Log(angle);
 		Quaternion desiredRot = Quaternion.Euler(0, 0, angle);
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRot, Time.fixedDeltaTime * lerpSpeed);
 		
@@ -67,6 +62,18 @@ public class Wheel : MonoBehaviour
 			
 	}
 
+	private void ClampAngle()
+	{
+		if (angle > 360)
+			angle = angle % 360;
+
+		else if (angle < 0)
+		{
+			float val = Mathf.Abs(angle);
+			angle = 360 - (val % 360);
+		}
+	}
+
 	private void Awake()
 	{
 		outlineImage = GetComponent<Image>();
@@ -78,6 +85,7 @@ public class Wheel : MonoBehaviour
 		Debug.Log("Setup wheel " + GameManager.Instance.NumCategories);
 
 		transform.rotation = Quaternion.identity;
+		lastAngle = 0;
 
 		// Check we have enough lines pooled. Otherwise spawn more to fill the gaps.
 		int numWheelLines = wheelLines.Count;
@@ -93,7 +101,7 @@ public class Wheel : MonoBehaviour
 		// Hide all the lines
 		DisableLines();
 
-		degreesPerSection = (float) 360 / GameManager.Instance.NumCategories;
+		degreesPerSection = GameManager.Instance.DegreesPerCategory;
 		Debug.Log(degreesPerSection);
 
 		// Iterate over the options and place the lines accordingly.
@@ -114,8 +122,6 @@ public class Wheel : MonoBehaviour
 
 	public WheelSection WhichWheelSectionDidWeLandOn()
 	{
-		float anglePerSection = 360f / GameManager.Instance.NumCategories;
-
 		// Iterate over the bounds of each section and see if within.
 		for (int i = 0; i < GameManager.Instance.NumCategories; i++)
 		{
@@ -130,7 +136,7 @@ public class Wheel : MonoBehaviour
 	public void Shine(bool toggle)
 	{
 		if (toggle)
-			outlineImage.color = onSelectedColour;
+			outlineImage.color = GameManager.Instance.GoodColour;
 			
 		else
 			outlineImage.color = defaultColour;

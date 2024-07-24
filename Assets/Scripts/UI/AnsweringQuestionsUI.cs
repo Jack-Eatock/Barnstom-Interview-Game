@@ -1,24 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class AnsweringQuestionsUI : MonoBehaviour
 {
 	public static AnsweringQuestionsUI Instance;
 
 	[SerializeField]
-	private TextMeshProUGUI CategoryText, QuestionText;
-
+	private TextMeshProUGUI categoryText, questionText;
 	[SerializeField]
 	private Transform buttonHolder;
 	[SerializeField]
 	private ButtonScript button;
-	private IEnumerator coroutine;
 	[SerializeField]
 	private float timeToWaitBeforeShowingAnswer = 2, timeToWaitAfterShowingAnswer = 2;
 
+	private IEnumerator coroutine;
 	private List<ButtonScript> buttons = new List<ButtonScript>();
 
 	private void Awake()
@@ -28,6 +27,7 @@ public class AnsweringQuestionsUI : MonoBehaviour
 		else
 			Destroy(Instance);
 
+		// Clean up buttons
 		foreach (Transform button in buttonHolder)
 			Destroy(button.gameObject);
 	}
@@ -37,10 +37,10 @@ public class AnsweringQuestionsUI : MonoBehaviour
 		transform.GetChild(0).gameObject.SetActive(show);
 	}
 
-	public void Setup(SO_Category category, SO_Question question)
+	public void Setup(SO_Category category, SO_Question question, Action<SO_Answer> clickedCB)
 	{
-		CategoryText.text = "Category: " + category.Text;
-		QuestionText.text = question.Text;
+		categoryText.text = "Category: " + category.Text;
+		questionText.text = question.Text;
 
 		SO_Answer[] answerArray = new SO_Answer[question.IncorrectAnswers.Count + 1];
 
@@ -63,40 +63,44 @@ public class AnsweringQuestionsUI : MonoBehaviour
 		// Setup all the buttons
 		HideAllButtons();
         for (int i = 0; i < answerArray.Length; i++)
-			buttons[i].Setup(answerArray[i], OnButtonClicked);
+			buttons[i].Setup(answerArray[i], clickedCB);
 
 		// Shuffle the buttons. So it is not always the first button.
 		foreach (Transform button in buttonHolder)
-			button.SetSiblingIndex(Random.Range(0, buttonHolder.childCount));
+			button.SetSiblingIndex(UnityEngine.Random.Range(0, buttonHolder.childCount));
     }
 
-	private void OnButtonClicked(SO_Answer answer)
+	public void DisplayAnswer(bool didTheyAnswerCorrect, SO_Answer answerToHighlight)
 	{
-		Debug.Log("Clicked " + answer.Text);
-
 		// Was it correct??
 		if (coroutine != null)
 			StopCoroutine(coroutine);
 
-		coroutine = DelayedAnswer();
+		coroutine = DelayedAnswer(didTheyAnswerCorrect, answerToHighlight);
 		StartCoroutine(coroutine);
 	}
 
-	private IEnumerator DelayedAnswer()
+	private IEnumerator DelayedAnswer(bool didTheyAnswerCorrect, SO_Answer asnwerToHighlight)
 	{
 		GameManager.Instance.EventSystem.enabled = false;
 
 		yield return new WaitForSecondsRealtime(timeToWaitBeforeShowingAnswer);
 
-		// Is it the correct answer?
+		// Highlight the correct button
 		foreach (ButtonScript button in buttons)
 		{
-			if (button.gameObject.activeSelf && button.Answer == GameManager.Instance.Question.CorrectAnswer)
+			if (button.gameObject.activeSelf && button.Answer == asnwerToHighlight)
 			{
-				button.FlashColour(Color.green, timeToWaitAfterShowingAnswer);
+				button.FlashColour(GameManager.Instance.GoodColour, timeToWaitAfterShowingAnswer);
 				break;
 			}
 		}
+
+		// Play sound
+		if (didTheyAnswerCorrect)
+			AudioManager.Instance.PlayClip("Success", .8f);
+		else
+			AudioManager.Instance.PlayClip("Failure", .8f);
 
 		yield return new WaitForSecondsRealtime(timeToWaitAfterShowingAnswer);
 

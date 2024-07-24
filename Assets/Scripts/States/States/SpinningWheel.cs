@@ -116,6 +116,9 @@ namespace States
 			while (Mathf.Abs(gameManager.Wheel.Velocity) > .1f)
 				yield return new WaitForEndOfFrame();
 
+			// Complete
+			AudioManager.Instance.PlayClip("Success", 1f);
+
 			// What category??
 			gameManager.LandedOnWheelSection(gameManager.Wheel.WhichWheelSectionDidWeLandOn());
 
@@ -124,7 +127,7 @@ namespace States
 			gameManager.Wheel.Shine(true);
 			Debug.Log("section " + gameManager.ActiveWheelSection.Category.Text);
 
-			yield return new WaitForSecondsRealtime(4);
+			yield return new WaitForSecondsRealtime(2);
 
 			gameManager.SwitchState(StatesDefinitions.GameStates.AnsweringQuestions);
 		}
