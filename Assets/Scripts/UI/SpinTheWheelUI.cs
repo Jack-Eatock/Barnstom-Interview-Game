@@ -14,6 +14,10 @@ public class SpinTheWheelUI : MonoBehaviour
 			Destroy(Instance);
 	}
 
+	/// <summary>
+	/// Show or hide this menu
+	/// </summary>
+	/// <param name="show"></param>
 	public void ShowHide(bool show)
 	{
 		transform.GetChild(0).gameObject.SetActive(show);

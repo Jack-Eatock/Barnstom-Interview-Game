@@ -32,6 +32,10 @@ public class AnsweringQuestionsUI : MonoBehaviour
 			Destroy(button.gameObject);
 	}
 
+	/// <summary>
+	/// Show or hide this menu
+	/// </summary>
+	/// <param name="show"></param>
 	public void ShowHide(bool show)
 	{
 		transform.GetChild(0).gameObject.SetActive(show);
@@ -70,6 +74,9 @@ public class AnsweringQuestionsUI : MonoBehaviour
 			button.SetSiblingIndex(UnityEngine.Random.Range(0, buttonHolder.childCount));
     }
 
+	/// <summary>
+	/// Plays an animation before displaying the correct answer
+	/// </summary>
 	public void DisplayAnswer(bool didTheyAnswerCorrect, SO_Answer answerToHighlight)
 	{
 		// Was it correct??

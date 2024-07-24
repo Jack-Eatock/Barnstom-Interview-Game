@@ -9,12 +9,6 @@ public class Wheel : MonoBehaviour
 	private WheelSection wheelLine;
 	[SerializeField]
 	private Transform lineHolder;
-
-	private List<WheelSection> wheelLines = new List<WheelSection>();
-	private float degreesPerSection;
-	private float velocity = 0;
-	private float angle = 0;
-
 	[SerializeField]
 	private float lerpSpeed = 5;
 	[SerializeField]
@@ -25,16 +19,21 @@ public class Wheel : MonoBehaviour
 	private float velocityReduction = 100;
 	[SerializeField]
 	private float maxVelocity = 300;
+
 	private Color defaultColour;
 	private Image outlineImage;
 	private float lastAngle;
+	private List<WheelSection> wheelLines = new List<WheelSection>();
+	private float degreesPerSection;
+	private float velocity = 0;
+	private float angle = 0;
 
 	public float Velocity => velocity;
 
 	private void FixedUpdate()
 	{
 		// Rotate from 0 to 360 based on the velocity.
-		angle -= velocity * Time.fixedDeltaTime * spinSpeed; // Mathf.Lerp(0, 360, fraction);
+		angle -= velocity * Time.fixedDeltaTime * spinSpeed; 
 		ClampAngle();
 
 		// every time the angle passes x degrees play a sound.
@@ -59,9 +58,12 @@ public class Wheel : MonoBehaviour
 			else
 				velocity = Mathf.Clamp(velocity - velocityReductionRateGraph.Evaluate(val) * velocityReduction * Time.fixedDeltaTime, 0, maxVelocity);
 		}
-			
 	}
 
+	/// <summary>
+	/// Ensures that the angle stays between 0 and 360 this is to prevent quaternion errors during conversions.
+	/// Also makes the maths easier for calculating which segment it landed on.
+	/// </summary>
 	private void ClampAngle()
 	{
 		if (angle > 360)

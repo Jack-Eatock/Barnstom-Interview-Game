@@ -21,6 +21,10 @@ namespace States
 			AnsweringQuestionsUI.Instance.ShowHide(false);
 		}
 
+		/// <summary>
+		/// One of the available answers has been clicked. Handles checking if it is correct and informing the ui how to respond.
+		/// </summary>
+		/// <param name="answer"></param>
 		public void ButtonClicked(SO_Answer answer) 
 		{
 			AudioManager.Instance.PlayClip("UiClick", 1f);
