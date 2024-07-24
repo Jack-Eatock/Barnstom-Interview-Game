@@ -14,8 +14,6 @@ public class WheelSection : MonoBehaviour
     [SerializeField]
     private Transform textHolder;
     private SO_Category category;
-    [SerializeField]
-    private Color selectedColour;
     private Color defaultColour;
 
     private float startAngle = 0, endAngle = 0;
@@ -56,9 +54,9 @@ public class WheelSection : MonoBehaviour
         if (toggle)
         {
             transform.SetAsLastSibling();
-			labelText.color = selectedColour;
-			image1.color = selectedColour;
-			image2.color = selectedColour;
+			labelText.color = GameManager.Instance.GoodColour; 
+			image1.color = GameManager.Instance.GoodColour;
+			image2.color = GameManager.Instance.GoodColour; 
 		}
         else
         {

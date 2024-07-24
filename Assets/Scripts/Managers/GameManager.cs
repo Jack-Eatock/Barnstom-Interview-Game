@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private TextMeshProUGUI sliderText;
 
+	[SerializeField]
+	private Color goodColour;
+
 	// Current game
 	private WheelSection activeWheelSection;
 	private SO_Category activeCategory;
@@ -38,9 +41,14 @@ public class GameManager : MonoBehaviour
 
 	#region Getters and Setters
 
+	public Color GoodColour => goodColour;
 	public WheelSection ActiveWheelSection => activeWheelSection;
 	public Wheel Wheel => wheel;
 	public int NumCategories => numCategories;
+	public float DegreesPerCategory
+	{
+		get { return (float )360 / NumCategories; }
+	}
 	public StatesDefinitions.IState ActiveState => _activeState;
 	public SO_GameConfig GameConfig => gameConfig;
 	public SO_Question Question => activeQuestion;
@@ -72,6 +80,8 @@ public class GameManager : MonoBehaviour
 
 	private void UpdateNumberOfCategories(float value)
 	{
+		if (AudioManager.Instance != null)
+			AudioManager.Instance.PlayClip("UiClick", .75f);
 		numCategories = (int)value;
 		wheel.SetupWheel();
 		sliderText.text = "Number of Categories: " + numCategories;
