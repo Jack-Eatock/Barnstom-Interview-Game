@@ -90,6 +90,9 @@ namespace States
 			return StatesDefinitions.ChangeInState.NoChange;
 		}
 
+		/// <summary>
+		/// The player either let go of the wheel or dragged of the sprite. The wheel has been released and will spin on its own.
+		/// </summary>
 		private void ReleasedTheWheel()
 		{
 			draggingWheel = false;
@@ -107,6 +110,10 @@ namespace States
 			}
 		}
 
+		/// <summary>
+		/// Awaits the spin to stop moving, calculates which segment was landed on and plays some visual and audio effects before switching game state.
+		/// </summary>
+		/// <returns></returns>
 		private IEnumerator AwaitingSpinFinishes()
 		{
 			gameManager.ToggleWheelSlider(false);
@@ -132,6 +139,9 @@ namespace States
 			gameManager.SwitchState(StatesDefinitions.GameStates.AnsweringQuestions);
 		}
 
+		/// <summary>
+		/// Checks if the mouse or finger is over the wheel sprite.
+		/// </summary>
 		private bool IsOverWheel(List<RaycastResult> eventSystemRaysastResults)
 		{
 			for (int index = 0; index < eventSystemRaysastResults.Count; index++)

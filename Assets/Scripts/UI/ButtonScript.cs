@@ -10,7 +10,6 @@ public class ButtonScript : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI text;
 	private Button button;
-
 	private SO_Answer cachedAnswer;
 	private Action<SO_Answer> callback;
 	private IEnumerator flashingColour;
